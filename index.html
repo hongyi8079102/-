@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>互动视频</title>
+    <style>
+        @font-face {
+            font-family: 'KaiTi';
+            src: url('https://fonts.gstatic.com/s/notosanssc/v9/-F6pfjptAgt5VM-kVkqdyU8n9zU0.woff2'); /* 替换为实际的字体文件URL */
+        }
+        body, html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #f0e9d2;
+        }
+        #video-container {
+            position: relative;
+            width: 100%;
+            height: 100%;
+        }
+        iframe {
+            width: 100%;
+            height: 100%;
+        }
+        .option {
+            position: absolute;
+            bottom: 10%;
+            padding: 10px 20px;
+            border: 2px solid #8b4513;
+            color: #fff;
+            font-size: 18px;
+            cursor: pointer;
+            font-family: 'KaiTi', serif;
+            background-color: #d2691e;
+            border-radius: 5px;
+            display: none;
+        }
+        .option:hover {
+            background-color: #cd853f;
+        }
+        .option-a {
+            left: 25%;
+        }
+        .option-b {
+            right: 25%;
+        }
+        .option-c {
+            left: 50%;
+            transform: translateX(-50%);
+        }
+    </style>
+</head>
+<body>
+    <div id="video-container">
+        <iframe id="video" src="" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+        <div id="option-a" class="option option-a" onclick="chooseOption('A')">选项A</div>
+        <div id="option-b" class="option option-b" onclick="chooseOption('B')">选项B</div>
+        <div id="option-c" class="option option-c" onclick="chooseOption('C')">继续</div>
+    </div>
+
+    <script>
+        const video = document.getElementById('video');
+        const optionA = document.getElementById('option-a');
+        const optionB = document.getElementById('option-b');
+        const optionC = document.getElementById('option-c');
+
+        const videos = {
+            1: 'https://www.youtube.com/embed/xW1An2w8ykc?rel=0',
+            2: 'https://www.youtube.com/embed/F-wvldlpMPM?rel=0',
+            3: 'https://www.youtube.com/embed/It5kvfBDpVM?rel=0',
+            4: 'https://www.youtube.com/embed/8JyIdjrzwyM?rel=0',
+            5: 'https://www.youtube.com/embed/BiNFgJJM4s0?rel=0',
+            6: 'https://www.youtube.com/embed/Y7fEP5u3ukY?rel=0',
+            7: 'https://www.youtube.com/embed/eSAlFlv5Qkg?rel=0',
+            8: 'https://www.youtube.com/embed/sisPYG8iK5I?rel=0',
+            9: 'https://www.youtube.com/embed/-jyESbYsXJc?rel=0',
+            10: 'https://www.youtube.com/embed/YDfPiCqwvqQ?rel=0',
+            11: 'https://www.youtube.com/embed/w9zoI0mPbzA?rel=0',
+            12: 'https://www.youtube.com/embed/F-wvldlpMPM?rel=0',
+            13: 'https://www.youtube.com/embed/It5kvfBDpVM?rel=0',
+            14: 'https://www.youtube.com/embed/Y7fEP5u3ukY?rel=0',
+            15: 'https://www.youtube.com/embed/eSAlFlv5Qkg?rel=0',
+            16: 'https://www.youtube.com/embed/sisPYG8iK5I?rel=0',
+            17: 'https://www.youtube.com/embed/-jyESbYsXJc?rel=0',
+            18: 'https://www.youtube.com/embed/YDfPiCqwvqQ?rel=0',
+            19: 'https://www.youtube.com/embed/w9zoI0mPbzA?rel=0',
+            20: 'https://www.youtube.com/embed/qHUs590TY4w?rel=0',
+            21: 'https://www.youtube.com/embed/PDwEFolk7gw?rel=0',
+            22: 'https://www.youtube.com/embed/YDfPiCqwvqQ?rel=0',
+            23: 'https://www.youtube.com/embed/TYCtSnaaxuc?rel=0',
+            24: 'https://www.youtube.com/embed/Qz418ChvPz0?rel=0',
+            25: 'https://www.youtube.com/embed/F3k3o_VoH5U?rel=0',
+            26: 'https://www.youtube.com/embed/0PF4aCfUEog?rel=0',
+            27: 'https://www.youtube.com/embed/DWV_Or9TLIg?rel=0',
+            28: 'https://www.youtube.com/embed/Wgav52PGH_E?rel=0',
+            29: 'https://www.youtube.com/embed/N5BUov0DJ_Y?rel=0',
+            30: 'https://www.youtube.com/embed/pEK-aCC31zo?rel=0',
+            31: 'https://www.youtube.com/embed/-ZKxUATyQ9s?rel=0',
+            32: 'https://www.youtube.com/embed/NAXDK5FEKfE?rel=0',
+            33: 'https://www.youtube.com/embed/mTqm3uIsclc?rel=0',
+            34: 'https://www.youtube.com/embed/PDwEFolk7gw?rel=0',
+            35: 'https://www.youtube.com/embed/mTqm3uIsclc?rel=0',
+            36: 'https://www.youtube.com/embed/z-8uchVgTeo?rel=0',
+            37: 'https://www.youtube.com/embed/mRr7TY_Np4s?rel=0',
+            38: 'https://www.youtube.com/embed/nVGJZY2Dm4M?rel=0',
+            39: 'https://www.youtube.com/embed/IP7NOOordCE?rel=0',
+            40: 'https://www.youtube.com/embed/sInUmGJqGow?rel=0',
+            41: 'https://www.youtube.com/embed/pEK-aCC31zo?rel=0',
+            42: 'https://www.youtube.com/embed/PDwEFolk7gw?rel=0',
+            43: 'https://www.youtube.com/embed/Qz418ChvPz0?rel=0',
+            44: 'https://www.youtube.com/embed/0PF4aCfUEog?rel=0',
+            45: 'https://www.youtube.com/embed/0PF4aCfUEog?rel=0',
+            46: 'https://www.youtube.com/embed/sInUmGJqGow?rel=0',
+            47: 'https://www.youtube.com/embed/F3k3o_VoH5U?rel=0',
+            48: 'https://www.youtube.com/embed/F3k3o_VoH5U?rel=0',
+            49: 'https://www.youtube.com/embed/7FCrRAoErQY?rel=0',
+            50: 'https://www.youtube.com/embed/N5BUov0DJ_Y?rel=0',
+            51: 'https://www.youtube.com/embed/RaHk7EfFqqU?rel=0',
+            52: 'https://www.youtube.com/embed/DWV_Or9TLIg?rel=0',
+            53: 'https://www.youtube.com/embed/rRuGrnOMjz4?rel=0',
+            54: 'https://www.youtube.com/embed/NAXDK5FEKfE?rel=0',
+            55: 'https://www.youtube.com/embed/Qz418ChvPz0?rel=0',
+            56: 'https://www.youtube.com/embed/sv1to1ubnIE?rel=0',
+            57: 'https://www.youtube.com/embed/TYCtSnaaxuc?rel=0'
+        };
+
+        const choices = {
+            1: { A: 2 },
+            2: { A: 3 },
+            3: { A: 4 },
+            4: { A: 5 },
+            5: { A: 6 },
+            6: { A: 7 },
+            7: { A: 8 },
+            8: { A: 9 },
+            9: { A: 10 },
+            10: { A: 11, B: 12 },
+            11: { A: 19 },
+            12: { A: 13, B: 14 },
+            13: { A: 18 },
+            14: { A: 15 },
+            15: { A: 16 },
+            16: { A: 17 },
+            17: { A: 18 },
+            18: { A: 19 },
+            19: { A: 20 },
+            20: { A: 21, B: 23 },
+            21: { A: 22, B: 23 },
+            22: { A: 24 },
+            23: { A: 25 },
+            24: { A: 56 },
+            25: { A: 26 },
+            26: { A: 27, B: 28 },
+            27: { A: 56 },
+            28: { A: 29 },
+            29: { A: 30 },
+            30: { A: 56 },
+            31: { A: 56 },
+            32: { A: 33, B: 34 },
+            33: { A: 35 },
+            34: { A: 56 },
+            35: { A: 36 },
+            36: { A: 37 },
+            37: { A: 38, B: 40 },
+            38: { A: 39 },
+            39: { A: 56 },
+            40: { A: 41, B: 42 },
+            41: { A: 56 },
+            42: { A: 43, B: 44 },
+            43: { A: 45 },
+            44: { A: 45, B: 47 },
+            45: { A: 46, B: 47 },
+            46: { A: 56 },
+            47: { A: 48 },
+            48: { A: 49 },
+            49: { A: 50, B: 51 },
+            50: { A: 56 },
+            51: { A: 52 },
+            52: { A: 53, B: 54 },
+            53: { A: 55 },
+            54: { A: 55 },
+            55: { A: 56 }
+        };
+
+        let currentVideo = 1;
+
+        function loadVideo(videoNumber) {
+            video.src = videos[videoNumber] + "&enablejsapi=1&autoplay=1";
+            hideOptions();
+        }
+
+        function hideOptions() {
+            optionA.style.display = 'none';
+            optionB.style.display = 'none';
+            optionC.style.display = 'none';
+        }
+
+        function displayOptions(videoNumber) {
+            const choice = choices[videoNumber];
+            optionA.style.display = choice?.A ? 'block' : 'none';
+            optionB.style.display = choice?.B ? 'block' : 'none';
+            optionC.style.display = choice?.C ? 'block' : 'none';
+        }
+
+        function chooseOption(option) {
+            const nextVideo = choices[currentVideo][option];
+            if (nextVideo) {
+                currentVideo = nextVideo;
+                loadVideo(currentVideo);
+            }
+        }
+
+        function onPlayerStateChange(event) {
+            if (event.data === YT.PlayerState.ENDED) {
+                displayOptions(currentVideo);
+            }
+        }
+
+        function onYouTubeIframeAPIReady() {
+            new YT.Player('video', {
+                events: {
+                    'onStateChange': onPlayerStateChange
+                }
+            });
+        }
+
+        // 加载YouTube IFrame Player API
+        var tag = document.createElement('script');
+        tag.src = "https://www.youtube.com/iframe_api";
+        var firstScriptTag = document.getElementsByTagName('script')[0];
+        firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+
+        // 初始加载第一个视频
+        loadVideo(currentVideo);
+    </script>
+</body>
+</html>
